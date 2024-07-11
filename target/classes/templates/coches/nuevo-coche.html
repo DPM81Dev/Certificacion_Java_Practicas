@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Coche</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+    <h1>Nuevo Coche</h1>
+    <form th:action="@{/coches/nuevo}" th:object="${coche}" method="post" onsubmit="return validarMatricula()">
+        <div>
+            <label for="marca">Marca:</label>
+            <input type="text" id="marca" th:field="*{marca}" required />
+        </div>
+        
+        <div>
+            <label for="modelo">Modelo:</label>
+            <input type="text" id="modelo" th:field="*{modelo}" required />
+        </div>
+        
+        <div>
+            <label for="color">Color:</label>
+            <input type="text" id="color" th:field="*{color}" required />
+        </div>
+
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <label for="matricula">Matrícula:</label>
+            <div style="display: flex; align-items: flex-start;">
+                <div style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;">
+                    <input type="text" id="numerosMatricula" required />
+                    <span>Números</span>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <input type="text" id="letrasMatricula" required />
+                    <span>Letras</span>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <input type="hidden" id="matricula" th:field="*{matricula}" />
+        </div>
+
+        <div>
+            <label for="combustible">Combustible:</label>
+            <select id="combustible" name="combustible" required>
+                <option value="" selected disabled>Seleccione un tipo de combustible</option>
+                <option th:each="combustible : ${combustibles}" th:value="${combustible}" th:text="${combustible}"></option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="numeroSerie">Número de Serie:</label>
+            <input type="text" id="numeroSerie" th:field="*{numeroSerie}" required />
+        </div>
+        
+        <div>
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" th:field="*{precio}" step="0.01" required />
+        </div>
+        
+        <div>
+            <label for="exposicion">Exposición:</label>
+            <input type="checkbox" id="exposicion" th:field="*{exposicion}" />
+        </div>
+        
+        <div>
+            <button type="submit">Guardar</button>
+        </div>
+    </form>
+
+    <script>
+        function validarMatricula() {
+            const numeros = document.getElementById('numerosMatricula').value;
+            const letras = document.getElementById('letrasMatricula').value.toUpperCase();
+            const matricula = document.getElementById('matricula');
+            
+            if (!/^\d{4}$/.test(numeros)) {
+                alert('Los números de la matrícula deben ser 4 dígitos');
+                return false;
+            }
+
+            if (!/^[B-DF-HJ-NP-TV-Z]{3}$/.test(letras)){
+                alert('Las letras de la matrícula deben ser consonantes.');
+                return false;
+            }
+
+            matricula.value = `${numeros} ${letras}`;
+
+            return true;
+        }
+    </script>
+</body>
+</html>
